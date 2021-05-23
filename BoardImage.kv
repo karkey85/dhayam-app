@@ -1,0 +1,28 @@
+#BoardImage.kv
+Container:
+
+#Container holds Grid layouts and other things
+<Container>:
+    id: contain
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1 #black, borderline
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ColorLabel>:
+    canvas.before:
+        Color:
+            rgba: 0.9,0.8,0.7,1 #brown
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<BlankLabel>:
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1 #white
+        Rectangle:
+            pos: self.pos
+            size: self.size
