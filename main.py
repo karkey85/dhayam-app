@@ -5,7 +5,7 @@ from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.screen import Screen 
-#from kivy.core.window import Window
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
@@ -36,7 +36,7 @@ ScreenManager:
         text : 'Dhayam'
         halign : 'center'
     MDRectangleFlatButton:
-        text : 'Play'
+        text : 'Play with computer'
         pos_hint : {'center_x':0.5,'center_y':0.4}
         on_press : root.manager.current = 'dhayam'
     MDRectangleFlatButton:
@@ -46,63 +46,61 @@ ScreenManager:
     MDRectangleFlatButton:
         text : 'Exit'
         pos_hint : {'center_x':0.5,'center_y':0.2}
-        on_press : root.manager.current = 'about'
+        on_press : app.exit_game()
 
 <DhayamScreen>:
     name : 'dhayam'
-    GridLayout:
-        size: root.height,root.width
-        cols : 15
-        spacing : 2
-        Button:
-            id: dice1_button
-            size_hint : None, None
-            size: 70,70
-            pos_hint: {'center_x': 0.5}
-            on_press: root.roll_dice1()
-            Image:
-                id: dice1_image
-                source: "dice-5.jpg"
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+    Image:
+        source : 'dhayam_board.PNG'
 
-        Button:
-            id: dice2_button
-            size_hint : None, None
-            size: 70,70
-            pos_hint: {'center_x': 0.5}
-            on_press: root.roll_dice2()
-            Image:
-                id: dice2_image
-                source: "dice-6.jpg"
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+    Button:
+        id: dice1_button
+        size_hint : None, None
+        size: 70,70
+        pos: 100,10 
+        on_press: root.roll_dice1()
+        Image:
+            id: dice1_image
+            source: "dice-5.jpg"
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
 
-        Button:
-            id: player1_button
-            size_hint : None, None
-            size: 50,50
-            pos_hint : None, None
-            pos: 370,370 
-            on_press: root.move_player1(self)
-            Image:
-                id: player1_image
-                source: "dice-1.jpg"
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+    Button:
+        id: dice2_button
+        size_hint : None, None
+        size: 70,70
+        pos: 400,10 
+        on_press: root.roll_dice2()
+        Image:
+            id: dice2_image
+            source: "dice-6.jpg"
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
 
-        Button:
-            id: player2_button
-            size_hint : None, None
-            size: 50,50
-            pos_hint : None, None
-            pos: 635,370 
-            on_press: root.move_player2(self)
-            Image:
-                id: player2_image
-                source: "dice-2.jpg"
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+    Button:
+        id: player1_button
+        size_hint : None, None
+        size: 39,38
+        pos_hint: {'center_x': 0.3}
+        on_press: root.move_player1(self)
+        Image:
+            id: player1_image
+            source: "p1.jpg"
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+
+    Button:
+        id: player2_button
+        size_hint : None, None
+        size: 39,38
+        pos_hint: {'center_x': 0.3}
+        on_press: root.move_player2(self)
+        Image:
+            id: player2_image
+            source: "p1.jpg"
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+
 
 <AboutScreen>:
     name : 'about'
@@ -110,21 +108,11 @@ ScreenManager:
         text : 'Tamil Inc.'
         halign : 'center'
     MDRectangleFlatButton:
-        text : 'Exit'
+        text : 'Back'
         pos_hint : {'center_x':0.5,'center_y':0.1}
         on_press : root.manager.current = 'start'
 
 """
-
-class Container(FloatLayout):
-    pass
-
-class ColorLabel(Label):
-    pass
-
-class BlankLabel(Label):
-    pass
-
 class StartScreen(Screen):
     pass
 
@@ -135,19 +123,9 @@ class DhayamScreen(Screen):
     player1_y = NumericProperty(0)
     player2_x = NumericProperty(0)
     player2_y = NumericProperty(0)
-    def __init__(self,**kwargs):
-        super(DhayamScreen, self).__init__(**kwargs)
-        the_grid = GridLayout(cols=15, spacing=2)
-        for i in range(15):
-                for j in range(15):
-                    if 5 < j%15 < 9 or 5 < i%15 < 9:
-                        newLabel = ColorLabel()
-                    else:
-                        newLabel = BlankLabel()
-                    the_grid.add_widget(newLabel)
-        self.root = Container()
-        self.root.add_widget(the_grid)
-        self.add_widget(self.root)
+    #def __init__(self,**kwargs):
+    #    super(DhayamScreen, self).__init__(**kwargs)
+    #    self.add_widget(self.root)
 
     def roll_dice1(self):
         print("button press: dicer1")
@@ -188,22 +166,32 @@ class DhayamScreen(Screen):
     def move_player1(self, widget):
         print("move player")
         print(self.dicer1)
-        #p_x = randint(0,800)
-        #p_y = randint(0,800)
-        p_x = 53*self.dicer1
-        p_y = 370
+        p_x = self.player1_x
+        p_y = self.player1_y
+        p_x = self.dicer1 
+        p_y = self.dicer1 
+        p_x = p_x * 38
+        p_y = p_y * 39
         animate = Animation(x=p_x, y=p_y, d=2, t='out_bounce')
-        print(p_x,p_y)
         animate.start(widget)
+        self.player1_x = p_x
+        self.player1_y = p_y
+        print(p_x,p_y)
 
     def move_player2(self, widget):
         print("move player")
         print(self.dicer2)
-        p_x = randint(0,800)
-        p_y = randint(0,800)
+        p_x = self.player2_x
+        p_y = self.player2_y
+        p_x = self.dicer2 
+        p_y = self.dicer2 
+        p_x = p_x * 38
+        p_y = p_y * 39
         animate = Animation(x=p_x, y=p_y, d=2, t='out_bounce')
-        print(p_x, p_y)
         animate.start(widget)
+        print(p_x, p_y)
+        self.player2_x = p_x
+        self.player2_y = p_y
 
 class AboutScreen(Screen):
     pass
@@ -216,10 +204,15 @@ sm.add_widget(AboutScreen(name='about'))
 
 class DhayamApp(MDApp):
     def build(self):
-        Builder.load_file("BoardImage.kv")
+        Window.size = (570, 585)
+        Window.minimum_width, Window.minimum_height = (570, 585)
+        #Builder.load_file("BoardImage.kv")
         screen = Builder.load_string(screen_helper)
 #        Clock.schedule_interval(Game._turn, 0.1)
         return screen
+
+    def exit_game(self, *args):
+        self.stop()
 
 if __name__ == '__main__':
     app = DhayamApp()
